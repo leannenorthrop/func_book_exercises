@@ -80,10 +80,31 @@ class Chp2Tests: XCTestCase {
         XCTAssertEqual(12, timesItByThree(4))
     }
     
+    // https://robots.thoughtbot.com/introduction-to-function-currying-in-swift
+    func testPartial2() {
+        let timesItByThree = partial2(3,{ $0 * $1 })
+        XCTAssertEqual(9, timesItByThree(b:3))
+        XCTAssertEqual(12, timesItByThree(b:4))
+    }
+    
     func testCompose() {
         let f = {2*$0}
         let g = {4+$0}
         let gThenf = compose(f, g)
         XCTAssertEqual(18, gThenf(5))
+    }
+    
+    func testCurry() {
+        let f : (Int,Int) -> Int = {$0*$1}
+        let curried = curry(f)
+        XCTAssertEqual(6, curried(3)(2))
+    }
+    
+    func testUnCurry() {
+        let f : (Int,Int) -> Int = {$0*$1}
+        let curried = curry(f)
+        XCTAssertEqual(6, curried(3)(2))
+        let uncurried = uncurry(curried)
+        XCTAssertEqual(6, uncurried(3,2))
     }
 }

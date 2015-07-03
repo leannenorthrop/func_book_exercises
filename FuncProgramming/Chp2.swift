@@ -4,6 +4,12 @@
 ///
 ///  Created by Leanne Northrop on 03/07/2015.
 ///
+/// Figured out exercises on my own but a nice post describing currying can be
+/// found at:
+///  https://robots.thoughtbot.com/introduction-to-function-currying-in-swift
+/// Other useful:
+/// https://www.weheartswift.com/higher-order-functions-map-filter-reduce-and-more/
+/// http://blog.scottlogic.com/2014/06/26/swift-sequences.html
 
 import Foundation
 
@@ -84,8 +90,10 @@ func partial1<A,B,C>(a: A, f:(A,B)->C) -> B -> C {
     return {f(a,$0)}
 }
 
+func partial2<A,B,C>(a: A, f:(A,B)->C)(b:B) -> C {
+    return {f(a,$0)}(b)
+}
 
-// https://robots.thoughtbot.com/introduction-to-function-currying-in-swift
 /// Exercise 2.3
 func curry<A,B,C>(f: (A,B)->C) -> A -> (B -> C) {
     return { a in { b in f(a, b) } }
