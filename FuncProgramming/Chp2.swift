@@ -80,12 +80,29 @@ func isSorted<A>(arr:[A], ordered: (A,A) -> Bool) -> Bool {
     return loop(1)
 }
 
+func partial1<A,B,C>(a: A, f:(A,B)->C) -> B -> C {
+    return {f(a,$0)}
+}
 
 
+// https://robots.thoughtbot.com/introduction-to-function-currying-in-swift
+/// Exercise 2.3
+func curry<A,B,C>(f: (A,B)->C) -> A -> (B -> C) {
+    return { a in { b in f(a, b) } }
+}
 
+/// Exercise 2.4
+func uncurry<A,B,C>(f: A -> B -> C) -> (A,B) -> C {
+    return {
+        a, b -> C in
+        return f(a)(b)
+    }
+}
 
-
-
+/// Exercise 2.5
+func compose<A,B,C>(f: B -> C, g: A ->B) -> A -> C {
+    return {f(g($0))}
+}
 
 //*****************************************************************************************
 //    Playground

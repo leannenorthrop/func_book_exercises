@@ -70,5 +70,20 @@ class Chp2Tests: XCTestCase {
             a < b
         }
         XCTAssertFalse(itsSorted2)
+        let itsSorted3 = isSorted(arr2,<)
+        XCTAssertFalse(itsSorted3)
+    }
+    
+    func testPartial1() {
+        let timesItByThree : Int -> Int = partial1(3) { $0 * $1 }
+        XCTAssertEqual(9, timesItByThree(3))
+        XCTAssertEqual(12, timesItByThree(4))
+    }
+    
+    func testCompose() {
+        let f = {2*$0}
+        let g = {4+$0}
+        let gThenf = compose(f, g)
+        XCTAssertEqual(18, gThenf(5))
     }
 }
