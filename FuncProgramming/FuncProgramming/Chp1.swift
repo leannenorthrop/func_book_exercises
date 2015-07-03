@@ -1,10 +1,13 @@
-//
-//  Chp1.swift
-//  Example code from 'Functional Programming in Scala' in Swift
-//
-//  Created by Leanne Northrop on 03/07/2015.
-//  Copyright (c) 2015 Leanne Northrop. All rights reserved.
-//
+///
+///  Chp1.swift
+///  Example code from 'Functional Programming in Scala' in Swift
+///
+///  Created by Leanne Northrop on 03/07/2015.
+///
+///  Thanks to:
+/// - http://www.juliusparishy.com/articles/2014/12/14/adopting-map-reduce-in-swift
+/// - GroupBy comes from https://www.snip2code.com/Snippet/281367/Swift--Group-array-values-into-a-diction.
+/// - Unzip comes from https://gist.github.com/kristopherjohnson/04dbc470e17f67f836a2
 
 import Foundation
 
@@ -53,9 +56,18 @@ func groupBy<K,V>(keyFunc: V -> K?) -> ([V]) -> [K: [V]] {
 /// Helper function to combine multiple charges to various cards into
 /// single charge per card
 func coalesce(charges: [Charge]) -> [Charge] {
+    // Group credit card charges to unique cards
     func keyFunc(v:Charge) -> String? { return v.cc.number }
     let grouped = groupBy(keyFunc)(charges)
-    let combined : [(String,Charge)] = map(grouped, { (key, value) in (key, value.reduce(Charge(cc:value[0].cc, amount: 0), combine: {$0.combine($1)})) })
+    
+    // Combine charges for each unique card
+    let combined : [(String,Charge)] = map(grouped){
+        (key, value) in
+        (key, value.reduce(Charge(cc:value[0].cc, amount: 0)){
+            charge1, charge2 in
+            charge1.combine(charge2)
+        })
+    }
     let creditCardCharges : (cc:[String],charges:[Charge]) = unzip(combined)
     return creditCardCharges.charges
 }
@@ -127,9 +139,19 @@ struct Cafe {
         Purchase multiple cups of coffee and charge to card.
     */
     func buyCoffees(cc:CreditCard, n:Int) -> ([Coffee], Charge) {
-        let purchases = Array(lazy(0..<n).map({ _ -> (Coffee,Charge) in self.buyCoffee(cc) }))
+        // Create list of coffee & charge purchase tuples
+        let purchases = Array((0..<n).map({ _ -> (Coffee,Charge) in self.buyCoffee(cc) }))
+        
+        // Flip coffee & charge tuples to two lists
         let tuple : (coffees:[Coffee], charges:[Charge]) = unzip(purchases)
-        let charges = tuple.charges.reduce(Charge(cc:cc, amount: 0), combine: {$0.combine($1)})
-        return (tuple.coffees, charges)
+        
+        // Create a single charge as all purchases are to the same card
+        // by combining charge amounts
+        let charge = tuple.charges.reduce(Charge(cc:cc, amount: 0)){
+            charge1, charge2 in
+            charge1.combine(charge2)
+        }
+        
+        return (tuple.coffees, charge)
     }
 }
