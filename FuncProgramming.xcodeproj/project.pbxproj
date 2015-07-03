@@ -12,6 +12,9 @@
 		D5525B951B46964500A7836E /* Chp1.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B941B46964500A7836E /* Chp1.swift */; };
 		D5525B961B46997700A7836E /* Chp1.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B941B46964500A7836E /* Chp1.swift */; };
 		D5525B981B46BED500A7836E /* Chap1ExamplesTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B971B46BED500A7836E /* Chap1ExamplesTestCase.swift */; };
+		D5525B9A1B46C5EF00A7836E /* Chp2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B991B46C5EF00A7836E /* Chp2.swift */; };
+		D5525B9C1B46C60900A7836E /* Chp2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B9B1B46C60900A7836E /* Chp2Tests.swift */; };
+		D5525B9D1B46C61A00A7836E /* Chp2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B991B46C5EF00A7836E /* Chp2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +35,8 @@
 		D5525B891B4692CB00A7836E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D5525B941B46964500A7836E /* Chp1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chp1.swift; sourceTree = "<group>"; };
 		D5525B971B46BED500A7836E /* Chap1ExamplesTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chap1ExamplesTestCase.swift; sourceTree = "<group>"; };
+		D5525B991B46C5EF00A7836E /* Chp2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chp2.swift; sourceTree = "<group>"; };
+		D5525B9B1B46C60900A7836E /* Chp2Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chp2Tests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +82,7 @@
 				D5525B7D1B4692CB00A7836E /* FuncProgramming.h */,
 				D5525B7B1B4692CB00A7836E /* Supporting Files */,
 				D5525B941B46964500A7836E /* Chp1.swift */,
+				D5525B991B46C5EF00A7836E /* Chp2.swift */,
 			);
 			path = FuncProgramming;
 			sourceTree = "<group>";
@@ -94,6 +100,7 @@
 			children = (
 				D5525B971B46BED500A7836E /* Chap1ExamplesTestCase.swift */,
 				D5525B881B4692CB00A7836E /* Supporting Files */,
+				D5525B9B1B46C60900A7836E /* Chp2Tests.swift */,
 			);
 			path = FuncProgrammingTests;
 			sourceTree = "<group>";
@@ -213,6 +220,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5525B9A1B46C5EF00A7836E /* Chp2.swift in Sources */,
 				D5525B951B46964500A7836E /* Chp1.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -222,6 +230,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5525B981B46BED500A7836E /* Chap1ExamplesTestCase.swift in Sources */,
+				D5525B9C1B46C60900A7836E /* Chp2Tests.swift in Sources */,
+				D5525B9D1B46C61A00A7836E /* Chp2.swift in Sources */,
 				D5525B961B46997700A7836E /* Chp1.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
