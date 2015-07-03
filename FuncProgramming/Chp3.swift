@@ -7,3 +7,18 @@
 //
 
 import Foundation
+
+class List<A> {
+    let list:[A]
+    var isEmpty : Bool {
+        return self.list.isEmpty
+    }
+    
+    init() {
+        list = []
+    }
+    
+    init(a:A...){
+        list = Array(a)
+    }
+}

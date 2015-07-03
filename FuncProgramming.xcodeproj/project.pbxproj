@@ -11,13 +11,13 @@
 		D5525B841B4692CB00A7836E /* FuncProgramming.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5525B781B4692CB00A7836E /* FuncProgramming.framework */; };
 		D5525B951B46964500A7836E /* Chp1.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B941B46964500A7836E /* Chp1.swift */; };
 		D5525B961B46997700A7836E /* Chp1.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B941B46964500A7836E /* Chp1.swift */; };
-		D5525B981B46BED500A7836E /* Chap1ExamplesTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B971B46BED500A7836E /* Chap1ExamplesTestCase.swift */; };
 		D5525B9A1B46C5EF00A7836E /* Chp2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B991B46C5EF00A7836E /* Chp2.swift */; };
 		D5525B9C1B46C60900A7836E /* Chp2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B9B1B46C60900A7836E /* Chp2Tests.swift */; };
 		D5525B9D1B46C61A00A7836E /* Chp2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B991B46C5EF00A7836E /* Chp2.swift */; };
 		D5525B9F1B46F56F00A7836E /* Chp3.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B9E1B46F56F00A7836E /* Chp3.swift */; };
 		D5525BA01B46F56F00A7836E /* Chp3.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525B9E1B46F56F00A7836E /* Chp3.swift */; };
 		D5525BA21B46F57E00A7836E /* Chp3Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525BA11B46F57E00A7836E /* Chp3Tests.swift */; };
+		D5525BA71B46F91100A7836E /* Chp1Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5525BA61B46F91100A7836E /* Chp1Tests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,11 +37,11 @@
 		D5525B831B4692CB00A7836E /* FuncProgrammingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FuncProgrammingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5525B891B4692CB00A7836E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D5525B941B46964500A7836E /* Chp1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chp1.swift; sourceTree = "<group>"; };
-		D5525B971B46BED500A7836E /* Chap1ExamplesTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chap1ExamplesTestCase.swift; sourceTree = "<group>"; };
 		D5525B991B46C5EF00A7836E /* Chp2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chp2.swift; sourceTree = "<group>"; };
 		D5525B9B1B46C60900A7836E /* Chp2Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chp2Tests.swift; sourceTree = "<group>"; };
 		D5525B9E1B46F56F00A7836E /* Chp3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chp3.swift; sourceTree = "<group>"; };
 		D5525BA11B46F57E00A7836E /* Chp3Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chp3Tests.swift; sourceTree = "<group>"; };
+		D5525BA61B46F91100A7836E /* Chp1Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chp1Tests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,8 +104,8 @@
 		D5525B871B4692CB00A7836E /* FuncProgrammingTests */ = {
 			isa = PBXGroup;
 			children = (
-				D5525B971B46BED500A7836E /* Chap1ExamplesTestCase.swift */,
 				D5525B881B4692CB00A7836E /* Supporting Files */,
+				D5525BA61B46F91100A7836E /* Chp1Tests.swift */,
 				D5525B9B1B46C60900A7836E /* Chp2Tests.swift */,
 				D5525BA11B46F57E00A7836E /* Chp3Tests.swift */,
 			);
@@ -237,8 +237,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5525B981B46BED500A7836E /* Chap1ExamplesTestCase.swift in Sources */,
 				D5525BA21B46F57E00A7836E /* Chp3Tests.swift in Sources */,
+				D5525BA71B46F91100A7836E /* Chp1Tests.swift in Sources */,
 				D5525B9C1B46C60900A7836E /* Chp2Tests.swift in Sources */,
 				D5525BA01B46F56F00A7836E /* Chp3.swift in Sources */,
 				D5525B9D1B46C61A00A7836E /* Chp2.swift in Sources */,
