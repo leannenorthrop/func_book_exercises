@@ -31,10 +31,44 @@ class Chp2Tests: XCTestCase {
         XCTAssertEqual(5, fib(6))
         XCTAssertEqual(8, fib(7))
     }
+
+    func testListing2_2() {
+        XCTAssertEqual("The absolute value of -1 is 1", Listing2_2().formatAbs(-1))
+        XCTAssertEqual("The factorial value of 3 is 6", Listing2_2().formatFactorial(3))
+    }
+    
+    func testListing2_2HOF() {
+        XCTAssertEqual("The absolute value of -1 is 1", Listing2_2_HigherOrderFunction().formatResult("absolute", n: -1, f: abs))
+        XCTAssertEqual("The factorial value of 3 is 6", Listing2_2_HigherOrderFunction().formatResult("factorial", n: 3, f:factorial))
+    }
     
     func testDuplicateStrings() {
         let result : (one:String,two:String) = duplicateStrings(3, "hi", "bye")
         XCTAssertEqual("hihihi", result.one)
         XCTAssertEqual("byebyebye", result.two)
+    }
+    
+    func testFindFirst() {
+        let arr = Array(map(stride(from: 1, through: 24, by: 2)){$0})
+        let foundIndex = findFirst(arr){
+            i in
+            i == 13
+        }
+        XCTAssertEqual(6, foundIndex)
+    }
+    
+    func testIsSorted() {
+        let arr = Array(map(stride(from: 1, through: 24, by: 2)){$0})
+        let itsSorted = isSorted(arr){
+            a,b in
+            a < b
+        }
+        XCTAssertTrue(itsSorted)
+        let arr2 = [2,9,8,42,3,2,0]
+        let itsSorted2 = isSorted(arr2){
+            a,b in
+            a < b
+        }
+        XCTAssertFalse(itsSorted2)
     }
 }
