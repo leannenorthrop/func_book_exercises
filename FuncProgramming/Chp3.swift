@@ -23,27 +23,13 @@ class List<A> {
         self.tail = nil
     }
 
-    init(head:A, tail:List<A>?){
+    convenience init(head:A){
+        self.init(head:head, tail: List<A>())
+    }
+    
+    init(head:A, tail:List<A>){
         self.head = head
         self.tail = tail
-    }
-    
-    init(arr:[A]){
-        var a = arr
-        let head = a.removeAtIndex(0)
-        var tail : [A] = a
-        
-        self.head = head
-        self.tail = tail.isEmpty ? nil : List<A>(arr:tail)
-    }
-    
-    init(arr:A...){
-        var a = arr
-        let head = a.removeAtIndex(0)
-        var tail : [A] = a
-        
-        self.head = head
-        self.tail = tail.isEmpty ? nil : List<A>(arr:tail)
     }
     
     subscript(index: Int) -> A? {
@@ -58,15 +44,31 @@ class List<A> {
         }
         return loop(index)
     }
+    
+    func tuple() -> (A?, List<A>?) {
+        return (head,tail)
+    }
+    
+    /// Exercise 3.2: Drop first item from list
+    /// :returns tail of list
+    func tail2() -> List<A>? {
+        return self.tail
+    }
+    
+    /// Exercise 3.3 Replace value at start of list with new value
+    /// :returns: New list
+    func setHead(item:A) -> List<A> {
+        return tail == nil ? List<A>(head:item,tail:List<A>()) : List<A>(head:item,tail:self.tail!)
+    }
 }
 
 struct ListHelpers {
     func sum(ints:List<Int>?) -> Int {
-        if ints == nil {
-            return 0
-        } else {
-            var lst = ints!
-            return lst.tail == nil ? lst.head! : lst.head! + sum(lst.tail)
+        let (head,tail) = ints!.tuple()
+        switch (head,tail) {
+        case(nil,nil): return 0
+        case(let head,nil) : return head!
+        case(let head, let tail) : return head! + sum(tail)
         }
     }
     
@@ -87,16 +89,20 @@ struct ListHelpers {
         }
     }
     
-    func product(ds:List<Float>?) -> Float {
-        if ds == nil {
-            return Float(1.0)
-        } else if ds!.isEmpty {
-            return Float(1.0)
-        } else if ds!.head == Float(0.0) {
-            return Float(0.0)
-        } else {
-            return ds!.head! * product(ds!.tail)
+    func product(floats:List<Float>?) -> Float {
+        let (head,tail) = floats!.tuple()
+        switch (head,tail) {
+        case(nil,nil): return Float(1.0)
+        case(let head,nil) : return head!
+        case(let head, let tail) : return head! * product(tail)
         }
     }
+    
+    /// Exercise 3.5 Drop the head items from the list while f returns true
+    /// :returns: New list
+    func drop<A>(l: List<A>, f: A -> Bool) -> List<A> {
+        return l.isEmpty ? l : (f(l.head!)  ? drop(l.tail!, f:f) : l)
+    }
+    
 }
 //***************************************************************************************
