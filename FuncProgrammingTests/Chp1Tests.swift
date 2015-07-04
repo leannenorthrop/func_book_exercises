@@ -3,11 +3,13 @@
 //  FuncProgrammingTests
 //
 //  Created by Leanne Northrop on 03/07/2015.
+//  Copyright (c) 2015 Leanne Northrop. All rights reserved.
 //
 
+import UIKit
 import XCTest
 
-class Chap1Tests: XCTestCase {
+class Chap1ExamplesTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
