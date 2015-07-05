@@ -165,4 +165,10 @@ class Chp3Tests: XCTestCase {
         XCTAssertEqual(105, product)
         
     }
+    
+    func testExercise3_12() {
+        let lst : List<Int> = listOps.apply([1,3,5,7,8,52])
+        let lst2 = listOps.reverse(lst)
+        println(lst2)
+    }
 }

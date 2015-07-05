@@ -175,7 +175,7 @@ struct ListHelpers {
     }
     
     /// Exercise 3.10 
-    /// Fold left
+    /// Fold left Broken implementation??? not tail recursive
     func foldLeft<A,B>(lst:List<A>, b:B, f: (B,A) -> B) -> B {
         let (head,tail) = lst.tuple()
         switch (head,tail) {
@@ -196,6 +196,7 @@ struct ListHelpers {
         var foldedValue = b
         let length = self.length(lst)
         for var i = 0; i < length; i++ {
+            println("lst = \(lst) folded value = \(foldedValue)")
             foldedValue = f(foldedValue,lst[i]!)
         }
         return foldedValue
@@ -212,6 +213,12 @@ struct ListHelpers {
     
     func lengthFoldLeft<A>(list:List<A>) -> Int {
         return foldLeft(list,b:0,f:{b,a in b+1})
+    }
+    
+    ///Exercise 3.12
+    func reverse<A>(lst:List<A>) -> List<A> {
+        return foldLeftIterative(lst, b:List<A>(), f: {List<A>(head:$1, tail: $0)})
+        //return foldLeft(lst, b:List<A>(), f: {List<A>(head:$1, tail: $0)})
     }
 }
 //***************************************************************************************
