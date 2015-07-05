@@ -10,7 +10,7 @@
 import Foundation
 
 //***************************************************************************************
-// Listing 3.1
+// Listings for Chapter 3
 class List<A> : Printable {
     let head:A?
     let tail:List<A>?
@@ -136,5 +136,82 @@ struct ListHelpers {
         }
     }
 
+    /// Listing 3.2
+    func foldRight<A,B>(lst:List<A>, b:B)(f:(A,B)->B)->B {
+        let (head,tail) = lst.tuple()
+        switch (head,tail) {
+        case (nil,nil): return b
+        case (let head,let tail): return f(head!, foldRight(tail!, b: b)(f:f))
+        }
+    }
+    
+    func sum2(ints:List<Int>) -> Int {
+        return foldRight(ints, b: 0)(f:{$0 + $1})
+    }
+    
+    func product2(floats:List<Float>) -> Float {
+        return foldRight(floats, b: Float(1))(f:{$0 * $1})
+    }
+    
+    /// Exercise 3.7 - Shortcut foldRight
+    func foldRight<A,B>(lst:List<A>, b:B)(f:(A,B)->(Bool,B))->(Bool,B) {
+        let (head,tail) = lst.tuple()
+        switch (head,tail) {
+        case (nil,nil): return (false,b)
+        case (let head,let tail):
+            let (err,res) = foldRight(tail!, b: b)(f:f)
+            return err ? (err,res) : f(head!, res)
+            
+        }
+    }
+    
+    func product3(floats:List<Float>) -> Float {
+        let (err,result) = foldRight(floats, b: Float(1))(f:{($0 == Float(0), $0 * $1)})
+        return err ? Float(0) : result
+    }
+    
+    func length<A>(list:List<A>) -> Int {
+        return foldRight(list,b:0)(f:{1+$1})
+    }
+    
+    /// Exercise 3.10 
+    /// Fold left
+    func foldLeft<A,B>(lst:List<A>, b:B, f: (B,A) -> B) -> B {
+        let (head,tail) = lst.tuple()
+        switch (head,tail) {
+        case (nil,nil): return b
+        case (let head,let tail): return f(foldLeft(tail!, b:b, f:f),head!)
+        }
+    }
+    
+    func foldLeft2<A,B>(lst:List<A>, b:B)(f: (B,A) -> B) -> B {
+        let (head,tail) = lst.tuple()
+        switch (head,tail) {
+        case (nil,nil): return b
+        case (let head,let tail): return f(foldLeft2(tail!, b:b)(f:f),head!)
+        }
+    }
+    
+    func foldLeftIterative<A,B>(lst:List<A>, b:B, f: (B,A) -> B) -> B {
+        var foldedValue = b
+        let length = self.length(lst)
+        for var i = 0; i < length; i++ {
+            foldedValue = f(foldedValue,lst[i]!)
+        }
+        return foldedValue
+    }
+    
+    ///Exercise 3.11
+    func sumFoldLeft(ints:List<Int>) -> Int {
+        return foldLeft2(ints, b: 0)(f:{$0 + $1})
+    }
+    
+    func productFoldLeft(floats:List<Float>) -> Float {
+        return foldLeft2(floats, b: Float(1.0))(f:{$0 * $1})
+    }
+    
+    func lengthFoldLeft<A>(list:List<A>) -> Int {
+        return foldLeft(list,b:0,f:{b,a in b+1})
+    }
 }
 //***************************************************************************************

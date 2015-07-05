@@ -30,6 +30,11 @@ class Chp3Tests: XCTestCase {
         XCTAssertEqual(11, listOps.sum(lst))
     }
     
+    func testSum2() {
+        var lst : List<Int> = listOps.apply([1,2,3,5])
+        XCTAssertEqual(11, listOps.sum2(lst))
+    }
+    
     func testApply() {
         var lst : List<String> = listOps.apply(["a","b","c","d","e"])
         XCTAssertEqual("a", lst[0]!)
@@ -41,6 +46,11 @@ class Chp3Tests: XCTestCase {
     func testProduct() {
         var lst : List<Float> = listOps.apply([1,2,3,5])
         XCTAssertEqual(30, listOps.product(lst))
+    }
+    
+    func testProduct2() {
+        var lst : List<Float> = listOps.apply([1,2,3,5])
+        XCTAssertEqual(30, listOps.product2(lst))
     }
     
     // Not sure of the relevance of currying drop as 
@@ -96,5 +106,63 @@ class Chp3Tests: XCTestCase {
         XCTAssertEqual(3, result1[1]!)
         XCTAssertEqual(8, result1[2]!)
         XCTAssertNil(result1[3])
+    }
+    
+    func testExercise3_7() {
+        var lst : List<Float> = listOps.apply([1,3,0,8,52])
+        let result1 = listOps.product3(lst)
+        XCTAssertEqual(Float(0), result1)
+    }
+    
+    func testExercise3_8() {
+        var lst : List<Int> = listOps.apply([1,2,3])
+        let result = listOps.foldRight(lst, b:List<Int>())(f: {List<Int>(head:$0,tail:$1)})
+    }
+    
+    func testExercise3_9() {
+        var lst : List<Int> = listOps.apply([1,3,5, 7,8,52,5,7])
+        let length1 = listOps.length(lst)
+        XCTAssertEqual(8, length1)
+        var lst2 : List<Int> = listOps.apply([1,3,5,7])
+        let length2 = listOps.length(lst2)
+        XCTAssertEqual(4, length2)
+
+    }
+    
+    func testExercise3_10a() {
+// stack overflow =        let array = (0..<10000).map { $0 }
+        let array = (0..<1000).map { $0 }
+        var lst : List<Int> = listOps.apply(array)
+        println("List length = \(listOps.length(lst))")
+    }
+    
+    func testExercise3_10b() {
+        var lst : List<Double> = listOps.apply([10.0,5.0])
+        let result = listOps.foldLeft(lst, b:2.0) {
+            b,a in
+            b/a
+        }
+        let result2 = listOps.foldLeftIterative(lst, b:2.0) {
+            b,a in
+            b/a
+        }
+        println("Fold left / = \(result)")
+        println("Reduce / = \(reduce([10.0,5.0], 2.0,{$0/$1}))")
+        println("Fold left iterative / = \(result2)")
+    }
+    
+    func testExercise3_11() {
+        var lst : List<Int> = listOps.apply([1,3,5,7,8,52,5,7])
+        let length1 = listOps.lengthFoldLeft(lst)
+        XCTAssertEqual(8, length1)
+        var lst2 : List<Int> = listOps.apply([1,3,5,7])
+        let length2 = listOps.lengthFoldLeft(lst2)
+        XCTAssertEqual(4, length2)
+        let sum = listOps.sumFoldLeft(lst2)
+        XCTAssertEqual(16, sum)
+        var lst3 : List<Float> = listOps.apply([Float(1),Float(3),Float(5),Float(7)])
+        let product = listOps.productFoldLeft(lst3)
+        XCTAssertEqual(105, product)
+        
     }
 }
