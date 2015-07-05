@@ -20,11 +20,11 @@ class List<A> : Printable {
             lst in
             var str = "unknown, "
             if let v = lst.head as? Printable {
-                str = v.description + ", "
+                str = v.description + (lst.tail!.isEmpty ? "" : ", ")
             }
-            return lst.isEmpty ? "" : str + loop(lst.tail!)
+            return lst.isEmpty ? ")" : str + loop(lst.tail!)
         }
-        return loop(self)
+        return "(" + loop(self)
     }
     
     var isEmpty : Bool {
@@ -219,6 +219,20 @@ struct ListHelpers {
     func reverse<A>(lst:List<A>) -> List<A> {
         return foldLeftIterative(lst, b:List<A>(), f: {List<A>(head:$1, tail: $0)})
         //return foldLeft(lst, b:List<A>(), f: {List<A>(head:$1, tail: $0)})
+    }
+    
+    func append<A>(lst:List<A>,a:A) -> List<A> {
+        //var lst2 = List<A>(head: a, tail:foldLeftIterative(lst, b:List<A>(), f: {List<A>(head:$1, tail: $0)}))
+        //return reverse(lst2)
+        let result = foldRight(lst, b:List<A>(head:a))(f: {List<A>(head:$0,tail:$1)})
+        return result
+    }
+    
+    func flatten<A>(lst:List<List<A>>) -> List<A> {
+        return foldLeftIterative(lst, b: List<A>(), f: {
+            d, c in
+            self.foldRight(d, b:c)(f: {List<A>(head:$0,tail:$1)})
+        })
     }
 }
 //***************************************************************************************

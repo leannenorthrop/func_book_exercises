@@ -22,7 +22,7 @@ class Chp3Tests: XCTestCase {
     
     func testPrintable() {
         let lst = List<Int>(head:1, tail:List<Int>(head:2,tail:List<Int>(head:3)))
-        XCTAssertEqual("1, 2, 3, ", lst.description)
+        XCTAssertEqual("(1, 2, 3)", lst.description)
     }
     
     func testSum() {
@@ -170,5 +170,22 @@ class Chp3Tests: XCTestCase {
         let lst : List<Int> = listOps.apply([1,3,5,7,8,52])
         let lst2 = listOps.reverse(lst)
         println(lst2)
+        XCTAssertEqual(52, lst2[0]!)
+    }
+    
+    func testExercise3_14() {
+        let lst : List<Int> = listOps.apply([1,3,5,7,8,52])
+        let lst2 = listOps.append(lst, a: 33)
+        println(lst2)
+        XCTAssertEqual(33, lst2[6]!)
+    }
+    
+    func testExercise3_15() {
+        let lst1 : List<Int> = listOps.apply([1,2,3])
+        let lst2 : List<Int> = listOps.apply([4,5,6])
+        let lst3 : List<List<Int>> = listOps.apply([lst1,lst2])
+        println(lst3)
+        println(listOps.flatten(lst3))
+        XCTAssertEqual(1, listOps.flatten(lst3)[0]!)
     }
 }
