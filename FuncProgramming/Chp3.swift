@@ -3,16 +3,29 @@
 //  FuncProgramming
 //
 //  Created by Leanne Northrop on 03/07/2015.
-//  Copyright (c) 2015 Leanne Northrop. All rights reserved.
 //
+//  Interesting discussion on currying
+// http://programmers.stackexchange.com/questions/185585/what-is-the-advantage-of-currying
 
 import Foundation
 
 //***************************************************************************************
 // Listing 3.1
-class List<A> {
+class List<A> : Printable {
     let head:A?
     let tail:List<A>?
+    var description :String {
+        var loop : List<A>->String = { _ in return ""}
+        loop = {
+            lst in
+            var str = "unknown, "
+            if let v = lst.head as? Printable {
+                str = v.description + ", "
+            }
+            return lst.isEmpty ? "" : str + loop(lst.tail!)
+        }
+        return loop(self)
+    }
     
     var isEmpty : Bool {
         return self.head == nil && self.tail == nil
@@ -67,7 +80,6 @@ struct ListHelpers {
         let (head,tail) = ints!.tuple()
         switch (head,tail) {
         case(nil,nil): return 0
-        case(let head,nil) : return head!
         case(let head, let tail) : return head! + sum(tail)
         }
     }
@@ -93,9 +105,13 @@ struct ListHelpers {
         let (head,tail) = floats!.tuple()
         switch (head,tail) {
         case(nil,nil): return Float(1.0)
-        case(let head,nil) : return head!
         case(let head, let tail) : return head! * product(tail)
         }
+    }
+    
+    /// Exercise 3.4 Drop the first n head items from the list
+    func drop<A>(l:List<A>, n:Int) -> List<A> {
+        return n == 0 || l.isEmpty ? l : drop(l.tail!,n:n-1)
     }
     
     /// Exercise 3.5 Drop the head items from the list while f returns true
@@ -104,5 +120,21 @@ struct ListHelpers {
         return l.isEmpty ? l : (f(l.head!)  ? drop(l.tail!, f:f) : l)
     }
     
+    /// Exercise 3.6
+    func head2<A>(l:List<A>) -> List<A> {
+        let (head,tail) = l.tuple()
+        return l.isEmpty ? List<A>() : (tail!.isEmpty ? List<A>() : List<A>(head:head!, tail:head2(tail!)))
+    }
+    
+    /// Curried drop  the head items from the list while f returns true
+    /// :returns: New list
+    func drop<A>(l: List<A>)(f: A -> Bool) -> List<A> {
+        if f(l.head!) {
+            return drop(l.tail!)(f:f)
+        } else {
+            return l
+        }
+    }
+
 }
 //***************************************************************************************
