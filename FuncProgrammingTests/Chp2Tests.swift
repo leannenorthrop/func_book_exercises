@@ -10,19 +10,19 @@ import XCTest
 
 class Chp2Tests: XCTestCase {
 
+    // page 20
     func testFactorialReturns1ForEndCase() {
         XCTAssertEqual(1, factorial(0))
     }
-    
+
+    // page 20
     func testFactorial() {
         XCTAssertEqual(6, factorial(3))
     }
     
-    func testFibEndCase() {
+    // page 21
+    func testExercise2_1() {
         XCTAssertEqual(0, fib(0))
-    }
-    
-    func testFib() {
         XCTAssertEqual(0, fib(1))
         XCTAssertEqual(1, fib(2))
         XCTAssertEqual(1, fib(3))
@@ -32,11 +32,13 @@ class Chp2Tests: XCTestCase {
         XCTAssertEqual(8, fib(7))
     }
 
+    // page 21
     func testListing2_2() {
         XCTAssertEqual("The absolute value of -1 is 1", Listing2_2().formatAbs(-1))
         XCTAssertEqual("The factorial value of 3 is 6", Listing2_2().formatFactorial(3))
     }
     
+    // page 21
     func testListing2_2HOF() {
         XCTAssertEqual("The absolute value of -1 is 1", Listing2_2_HigherOrderFunction().formatResult("absolute", n: -1, f: abs))
         XCTAssertEqual("The factorial value of 3 is 6", Listing2_2_HigherOrderFunction().formatResult("factorial", n: 3, f:factorial))
@@ -48,7 +50,7 @@ class Chp2Tests: XCTestCase {
         XCTAssertEqual("byebyebye", result.two)
     }
     
-    func testFindFirst() {
+    func testListing2_3() {
         let arr = Array(map(stride(from: 1, through: 24, by: 2)){$0})
         let foundIndex = findFirst(arr){
             i in
@@ -57,7 +59,7 @@ class Chp2Tests: XCTestCase {
         XCTAssertEqual(6, foundIndex)
     }
     
-    func testIsSorted() {
+    func testExercise2_2() {
         let arr = Array(map(stride(from: 1, through: 24, by: 2)){$0})
         let itsSorted = isSorted(arr){
             a,b in
@@ -94,13 +96,15 @@ class Chp2Tests: XCTestCase {
         XCTAssertEqual(18, gThenf(5))
     }
     
-    func testCurry() {
+    // Page 27
+    func testExercise2_3() {
         let f : (Int,Int) -> Int = {$0*$1}
         let curried = curry(f)
         XCTAssertEqual(6, curried(3)(2))
     }
     
-    func testUnCurry() {
+    // Page 27
+    func testExercise2_4() {
         let f : (Int,Int) -> Int = {$0*$1}
         let curried = curry(f)
         XCTAssertEqual(6, curried(3)(2))

@@ -1,6 +1,6 @@
 ///
 ///  Chp1.swift
-///  Example code from 'Functional Programming in Scala' in Swift
+///  Example and exercise code from 'Functional Programming in Scala' in Swift.
 ///
 ///  Created by Leanne Northrop on 03/07/2015.
 ///
@@ -14,7 +14,7 @@ import Foundation
 /**
     Converts array of pair tuple to a pair tuple of two arrays
 
-    :param: Array of pair tuples
+    :param: `array` Array of pair tuples
 
     :returns: Single pair tuples containing arrays of elements
 */
@@ -31,6 +31,9 @@ func unzip<T, U>(array: [(T, U)]) -> ([T], [U]) {
 /** Given an array collection 
     and a function that optionally maps each element to its corresponding group,
     return a Swift Dictionary of the mapped elements in their groups.
+
+    :param: `keyFunc` Mapping function from value to key
+    :returns: function taking a list of values and returning a dictionary of key, value pairs
 */
 func groupBy<K,V>(keyFunc: V -> K?) -> ([V]) -> [K: [V]] {
     var grouped = [K: [V]]()
@@ -55,6 +58,9 @@ func groupBy<K,V>(keyFunc: V -> K?) -> ([V]) -> [K: [V]] {
 
 /// Helper function to combine multiple charges to various cards into
 /// single charge per card
+///
+/// :param: `charges` list of multiple charges to multiple credit cards
+/// :returns: list of charges with one charge per unique credit card
 func coalesce(charges: [Charge]) -> [Charge] {
     // Group credit card charges to unique cards
     func keyFunc(v:Charge) -> String? { return v.cc.number }
@@ -111,7 +117,7 @@ struct Charge : Printable {
     /**
         Helper function to sum charges if the same credit card.
 
-        :param: A charge to a credit card
+        :param: `other` A charge to a credit card
         :returns: New charge which is sum of charge to this card and 'other' carge if the same card.
     */
     func combine(other: Charge) -> Charge {
@@ -125,10 +131,14 @@ struct Charge : Printable {
 
 /**
     Coffee cafe allows single or multiple cups of coffee to be purchased.
+    p6 of Chapter 1
 */
 struct Cafe {
     /**
         Purchase a single cup of coffee and charge to card.
+    
+        :param: `cc` credit card to charge
+        :returns: purchase tuple of cup of coffee and charge to credit card
     */
     func buyCoffee(cc:CreditCard) -> (Coffee,Charge) {
         let cup = Coffee(price:3.2)
@@ -137,6 +147,10 @@ struct Cafe {
 
     /**
         Purchase multiple cups of coffee and charge to card.
+    
+        :param: `cc` Credit card to make purchases with
+        :param: `n` Number of cups of coffee to purchase
+        :returns: purchase tuple of cups of coffee and single charge to credit card
     */
     func buyCoffees(cc:CreditCard, n:Int) -> ([Coffee], Charge) {
         // Create list of coffee & charge purchase tuples

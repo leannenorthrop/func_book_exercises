@@ -19,6 +19,10 @@ class List<A> : Printable {
         loop = {
             lst in
             var str = "unknown, "
+            if lst.head is String {
+                var s : String = lst.head! as! String
+                str = s + (lst.tail!.isEmpty ? "" : ", ")
+            }
             if let v = lst.head as? Printable {
                 str = v.description + (lst.tail!.isEmpty ? "" : ", ")
             }
@@ -154,6 +158,11 @@ struct ListHelpers {
     }
     
     /// Exercise 3.7 - Shortcut foldRight
+    ///
+    /// :param: List to iterate over
+    /// :param: Initial value for accumulator
+    /// :param: function to apply to list item and accummulator
+    /// :returns: tuple of error boolean and accumulated value
     func foldRight<A,B>(lst:List<A>, b:B)(f:(A,B)->(Bool,B))->(Bool,B) {
         let (head,tail) = lst.tuple()
         switch (head,tail) {
@@ -233,6 +242,45 @@ struct ListHelpers {
             d, c in
             self.foldRight(d, b:c)(f: {List<A>(head:$0,tail:$1)})
         })
+    }
+    
+    func addOne(ints:List<Int>) -> List<Int> {
+        return foldRight(ints, b:List<Int>())(f: {List<Int>(head:($0+1),tail:$1)})
+    }
+    
+    func toString(doubles:List<Double>) -> List<String> {
+        return foldRight(doubles, b:List<String>())(f: {List<String>(head:$0.description,tail:$1)})
+    }
+    
+    func map<A,B>(lst:List<A>)(f:A->B)->List<B> {
+        return foldRight(lst, b:List<B>())(f: {List<B>(head:f($0),tail:$1)})
+    }
+    
+    /// Exercise 3.19
+    func filter<A>(lst:List<A>)(f:A->Bool)->List<A> {
+        return foldRight(lst, b:List<A>())(f: {
+            var retain = f($0)
+            if retain {
+                return List<A>(head:$0,tail:$1)
+            } else {
+                return self.filter($1)(f:f)
+            }
+        })
+    }
+    
+    /// Exercise 3.20
+    func flatMap<A,B>(lst:List<A>)(f: A -> List<B>) -> List<B> {
+        return flatten(foldRight(lst, b:List<List<B>>())(f: {List<List<B>>(head:f($0),tail:$1)}))
+    }
+    
+    /// Exercise 3.21
+    func filter2<A>(lst:List<A>)(f: A -> Bool) -> List<A> {
+        let filterit : A -> List<A> = {f($0) ? List<A>(head:$0) : List<A>()}
+        return flatMap(lst)(f:filterit)
+    }
+    
+    func addLists<A>(lst1:List<A>,lst2:List<A>)(f:(A?,A?)->A) -> List<A> {
+        foldRight(lst1,
     }
 }
 //***************************************************************************************
