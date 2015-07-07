@@ -308,7 +308,16 @@ struct ListHelpers {
     }
     
     func addLists(lst1:List<Int>,lst2:List<Int>) -> List<Int> {
-        return List<Int>()
+        if lst1.isEmpty {
+            return List<Int>()
+        } else if lst2.isEmpty {
+            return List<Int>()
+        }
+        else {
+            let (head1,tail1) = lst1.tuple()
+            let (head2,tail2) = lst2.tuple()
+            return List<Int>(head:(head1!+head2!), tail:addLists(tail1!,lst2:tail2!))
+        }
     }
     
     
