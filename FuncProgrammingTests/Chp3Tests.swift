@@ -351,4 +351,39 @@ class Chp3Tests: XCTestCase {
         let result2 = listOps.hasSubsequence(lst, subList: lst3)
         XCTAssertFalse(result2)
     }
+    
+    // Page 46
+    func testExercise3_25() {
+        let leaf1 : Leaf<String> = Leaf(a: "a")
+        let leaf2 : Leaf<String> = Leaf(a: "b")
+        let root : Branch<String> = Branch(left:leaf1,right:leaf2)
+        let result = TreeHelper().count(root)
+        XCTAssertEqual(3,result)
+    }
+    
+    // Page 46
+    func testExercise3_26() {
+        let leaf1 : Leaf<Int> = Leaf(a: 10)
+        let leaf2 : Leaf<Int> = Leaf(a: -1)
+        let root : Branch<Int> = Branch(left:leaf1,right:leaf2)
+        let result = TreeHelper().maximum(root)
+        XCTAssertEqual(10,result)
+    }
+    
+    // Page 46
+    func testExercise3_27() {
+        let leaf1 : Leaf<Int> = Leaf(a: 10)
+        let leaf2 : Leaf<Int> = Leaf(a: -1)
+        let root : Branch<Int> = Branch(left:leaf1,right:leaf2)
+        let result = TreeHelper().depth(root)
+        XCTAssertEqual(2,result)
+    }
+    
+    // Page 46
+    func testExercise3_28() {
+        let leaf1 : Leaf<Int> = Leaf(a: 10)
+        let leaf2 : Leaf<Int> = Leaf(a: 20)
+        let root : Branch<Int> = Branch(left:leaf1,right:leaf2)
+        let result = TreeHelper().map(root){$0/10}
+    }
 }

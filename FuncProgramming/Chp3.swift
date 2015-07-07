@@ -413,3 +413,95 @@ struct ListHelpers {
         }
     }
 }
+
+class Tree<A> {
+}
+class Leaf<A> : Tree<A> {
+    let value:A
+    init(a:A) {
+        self.value = a
+    }
+}
+class Branch<A> : Tree<A> {
+    let left:Tree<A>?
+    let right:Tree<A>?
+    init(left:Tree<A>?,right:Tree<A>?) {
+        self.left = left
+        self.right = right
+    }
+    func tuple() -> (Tree<A>?,Tree<A>?) {
+        return (left,right)
+    }
+}
+
+struct TreeHelper {
+    func count<A>(tree:Tree<A>) -> Int {
+        switch tree {
+        case is Leaf<A> : return 1
+        case is Branch<A>:
+            var (left,right) = (tree as! Branch).tuple()
+            switch (left,right) {
+            case (nil,nil): return 1
+            case (nil,let right): return 1 + count(right!)
+            case (let left,nil): return 1 + count(left!)
+            case (let left,let right): return 1 + count(left!) + count(right!)
+            }
+        default: return 0
+        }
+    }
+    
+    func maximum(tree:Tree<Int>) -> Int {
+        switch tree {
+        case is Leaf<Int> : return (tree as! Leaf).value
+        case is Branch<Int>:
+            var (left,right) = (tree as! Branch).tuple()
+            switch (left,right) {
+            case (nil,nil): return Int.min
+            case (nil,let right): return maximum(right!)
+            case (let left,nil): return maximum(left!)
+            case (let left,let right): return max(maximum(left!), maximum(right!))
+            }
+        default: return 0
+        }
+    }
+    
+    func depth<A>(tree:Tree<A>) -> Int {
+        switch tree {
+        case is Leaf<A> : return 1
+        case is Branch<A>:
+            var (left,right) = (tree as! Branch).tuple()
+            switch (left,right) {
+            case (nil,nil): return 0
+            case (nil,let right): return 1 + depth(right!)
+            case (let left,nil): return 1 + depth(left!)
+            case (let left,let right): return 1 + max(depth(left!), depth(right!))
+            }
+        default: return 0
+        }
+    }
+    
+    func map<A,B>(tree:Tree<A>, f: A -> B) -> Tree<B> {
+        switch tree {
+        case is Leaf<A> : return Leaf<B>(a:f((tree as! Leaf<A>).value))
+        case is Branch<A>:
+            var (left,right) = (tree as! Branch<A>).tuple()
+            switch (left,right) {
+            case (nil,nil): return Branch<B>(left:nil,right:nil)
+            case (nil,let right): return Branch<B>(left:nil,right:map(right!,f:f))
+            case (let left,nil): return Branch<B>(left:nil,right:map(left!,f:f))
+            case (let left,let right): return Branch<B>(left:map(left!,f:f),right:map(right!,f:f))
+            }
+        default: return Branch<B>(left:nil,right:nil)
+        }
+    }
+    
+    func fold<A,B>(tree:Tree<A>?, f: A -> B, g: (B?,B?)->B?) -> B? {
+        switch tree {
+        case is Leaf<A> : return f((tree as! Leaf<A>).value)
+        case is Branch<A>:
+            var (left,right) = (tree as! Branch<A>).tuple()
+            return g(fold(left,f:f,g:g), fold(right,f:f,g:g))
+        default: return nil
+        }
+    }
+}
