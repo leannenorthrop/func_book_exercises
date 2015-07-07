@@ -66,7 +66,7 @@ class Chp3Tests: XCTestCase {
     // perfectly well as seen in Exercise 3.5 below
     func testCurriedDrop() {
         var lst : List<Int> = listOps.apply([1,3,5, 7,8,52,5,7])
-        lst = listOps.drop(lst)(f:{ $0 < 10 })
+        lst = listOps.dropAlt(lst)(f:{ $0 < 10 })
         XCTAssertEqual(52, lst[0]!)
         XCTAssertEqual(5, lst[1]!)
         XCTAssertEqual(7, lst[2]!)
@@ -338,5 +338,17 @@ class Chp3Tests: XCTestCase {
         case .Empty: println("empty")
         case let .Node(head,tail): println("head \(head) tail \(tail)")
         }
+    }
+    
+    // Page 44
+    func testExercise3_24() {
+        var lst : List<Double> = [1.0,2.0] & [3.0,4.0,5.0]
+        var lst2 : List<Double> = 2.0 & 3.0 & 4.0
+        let result = listOps.hasSubsequence(lst, subList: lst2)
+        XCTAssertTrue(result)
+        
+        var lst3 : List<Double> = 10.0 & 13.0 & 44.0
+        let result2 = listOps.hasSubsequence(lst, subList: lst3)
+        XCTAssertFalse(result2)
     }
 }

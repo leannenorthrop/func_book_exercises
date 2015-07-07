@@ -149,7 +149,7 @@ struct ListHelpers {
     
     /// Exercise 3.5 Drop the head items from the list while f returns true
     /// :returns: New list
-    func drop<A>(l: List<A>, f: A -> Bool) -> List<A> {
+    func drop<A>(l: List<A>, f: (A) -> Bool) -> List<A> {
         return l.isEmpty ? l : (f(l.head!)  ? drop(l.tail!, f:f) : l)
     }
     
@@ -161,9 +161,9 @@ struct ListHelpers {
     
     /// Curried drop  the head items from the list while f returns true
     /// :returns: New list
-    func drop<A>(l: List<A>)(f: A -> Bool) -> List<A> {
+    func dropAlt<A>(l: List<A>)(f: A -> Bool) -> List<A> {
         if f(l.head!) {
-            return drop(l.tail!)(f:f)
+            return dropAlt(l.tail!)(f:f)
         } else {
             return l
         }
@@ -368,6 +368,39 @@ struct ListHelpers {
             let (head1,tail1) = lst1.tuple()
             let (head2,tail2) = lst2.tuple()
             return List<A>(head:f(head1!,head2!), tail:zipWith(tail1!,lst2:tail2!,f:f))
+        }
+    }
+    
+    func hasSubsequence<A:Printable>(lst:List<A>,subList:List<A>) -> Bool {
+        if subList.isEmpty {
+            return true
+        } else if lst.isEmpty {
+            return false
+        } else {
+            /* won't compile
+            let l = self.drop(lst, f:{
+                (a:A) -> Bool in
+                return (a !== (subList.head!))
+            })*/
+            var v = lst
+            while true {
+                if v.isEmpty {
+                    break;
+                }
+                let v1 = v.head!.description
+                let v2 = subList.head!.description
+                if v1 == v2 {
+                    break
+                } else {
+                    v = v.tail!
+                }
+            }
+        
+            if v.isEmpty {
+                return false
+            } else {
+                return true && hasSubsequence(v.tail!,subList:subList.tail!)
+            }
         }
     }
 }
