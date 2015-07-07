@@ -120,6 +120,15 @@ class Chp3Tests: XCTestCase {
         XCTAssertEqual(8, result1[2]!)
         XCTAssertNil(result1[3])
     }
+    
+    func testPrintExercise3_6() {
+        var lst : List<Int> = listOps.apply([1,3,8,52])
+        let result1 = listOps.headPrinting(lst)
+        XCTAssertEqual(1, result1[0]!)
+        XCTAssertEqual(3, result1[1]!)
+        XCTAssertEqual(8, result1[2]!)
+        XCTAssertNil(result1[3])
+    }
 
     // page 40
     func testExercise3_7() {
@@ -132,6 +141,11 @@ class Chp3Tests: XCTestCase {
     func testExercise3_8() {
         var lst : List<Int> = listOps.apply([1,2,3])
         let result = listOps.foldRight(lst, b:List<Int>())(f: {List<Int>(head:$0,tail:$1)})
+    }
+    
+    func testPrintingExercise3_8() {
+        var lst : List<Int> = listOps.apply([1,2,3])
+        let result = listOps.foldRightPrinting(lst, b:List<Int>())(f: {List<Int>(head:$0,tail:$1)})
     }
     
     // page 40
@@ -258,12 +272,71 @@ class Chp3Tests: XCTestCase {
         XCTAssertEqual(2, results2[1]!)
     }
     
-    /// page 42
+    /// page 43
     func testExercise3_21() {
         let lst : List<Int> = listOps.apply([1,3,5,7,8,52,3,2])
         let isOdd : Int -> Bool = { int -> Bool in return ((int%2)==0) }
         let results = listOps.filter2(lst)(f:isOdd)
         println(results)
         XCTAssertEqual(8, results[0]!)
+    }
+    
+    /// page 43
+    func testExercise3_22() {
+        let lst : List<Int> = listOps.apply([1,3,5,7,8,52,3,2])
+        let results = listOps.addLists(lst,lst2:lst)
+        println(results)
+        XCTAssertEqual(2, results[0]!)
+        XCTAssertEqual(6, results[1]!)
+    }
+    
+    func testPrintingExercise3_10b() {
+        var lst : List<Double> = listOps.apply([1.0,2.0,3.0,4.0])
+        let result3 = listOps.foldLeftPrinting(lst, b:1.0)(f: {
+            b,a in
+            b+a
+        })
+
+        println("Fold left iterative + 1 = \(result3)")
+    }
+    
+    func testPrintingFoldRightExercise3_10b() {
+        var lst : List<Double> = listOps.apply([1.0,2.0,3.0,4.0])
+        let result3 = listOps.foldRightPrinting(lst, b:1.0)(f: {
+            b,a in
+            b+a
+        })
+        
+        println("Fold right iterative + 1 = \(result3)")
+        
+        let result = listOps.foldRightPrinting(lst, b:List<Double>())(f: {println("Create List<Double>(head:\($0), tail:\($1))");return List<Double>(head:$0,tail:$1)})
+        println("Fold right iterative copy = \(result)")
+    }
+    
+    // Page 43
+    func testExercise3_23() {
+        let lst1 : List<Int> = listOps.apply([1,2,3])
+        let lst2 : List<Int> = listOps.apply([4,5,6])
+        let result = listOps.zipWith(lst1,lst2:lst2,f:{$0+$1})
+        println(result)
+    }
+    
+    func testOperator() {
+        var lst : List<Double> = [1.0,2.0] & [3.0,4.0,5.0]
+        println(lst)
+        var lst2 : List<Double> = 1.0 & 2.0 & 3.0 & 4.0
+        println(lst2)
+        var (head,tail) = ~lst
+        println(head)
+        println(tail)
+    }
+    
+    func testList2() {
+        let empty = Cons<String>.Empty
+        let node : Cons<String> = Cons.Node("a", empty)
+        switch node {
+        case .Empty: println("empty")
+        case let .Node(head,tail): println("head \(head) tail \(tail)")
+        }
     }
 }

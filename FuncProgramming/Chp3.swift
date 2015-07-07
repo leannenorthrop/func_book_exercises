@@ -1,6 +1,6 @@
 //
 //  Chp3.swift
-//  FuncProgramming
+//  Example and exercise code from 'Functional Programming in Scala' in Swift.
 //
 //  Created by Leanne Northrop on 03/07/2015.
 //
@@ -9,8 +9,37 @@
 
 import Foundation
 
-//***************************************************************************************
-// Listings for Chapter 3
+infix operator & { associativity right }
+postfix operator ~ {}
+
+func &<A>(left: A, right: A) -> List<A> {
+    return List<A>(head: left, tail: List<A>(head:right))
+}
+func &<A>(left: A, right: List<A>) -> List<A> {
+    return List<A>(head: left, tail: right)
+}
+func &<A>(left: List<A>, right: A) -> List<A> {
+    return ListHelpers().append(left, a: right)
+}
+func &<A>(left: A, right: [A]) -> List<A> {
+    return List<A>(head: left, tail: ListHelpers().apply(right))
+}
+func &<A>(left: [A], right: A) -> List<A> {
+    let helper = ListHelpers()
+    return helper.append(helper.apply(left), a: right)
+}
+func &<A>(left: [A], right: [A]) -> List<A> {
+    let helper = ListHelpers()
+    let lst1 = helper.apply(left)
+    let lst2 = helper.apply(right)
+    let lstOfLst = List<List<A>>(head: lst1, tail:List<List<A>>(head:lst2))
+    
+    return helper.flatten(lstOfLst)
+}
+prefix func ~<A>(list: List<A>) -> (head:A?,tail:List<A>?) {
+    return list.tuple()
+}
+
 class List<A> : Printable {
     let head:A?
     let tail:List<A>?
@@ -205,7 +234,6 @@ struct ListHelpers {
         var foldedValue = b
         let length = self.length(lst)
         for var i = 0; i < length; i++ {
-            println("lst = \(lst) folded value = \(foldedValue)")
             foldedValue = f(foldedValue,lst[i]!)
         }
         return foldedValue
@@ -279,8 +307,67 @@ struct ListHelpers {
         return flatMap(lst)(f:filterit)
     }
     
-    func addLists<A>(lst1:List<A>,lst2:List<A>)(f:(A?,A?)->A) -> List<A> {
-        foldRight(lst1,
+    func addLists(lst1:List<Int>,lst2:List<Int>) -> List<Int> {
+        return List<Int>()
+    }
+    
+    
+    func headPrinting<A>(l:List<A>) -> List<A> {
+        let (head,tail) = l.tuple()
+        if l.isEmpty {
+            println("List is empty")
+            return List<A>()
+        } else {
+            if tail!.isEmpty {
+                println("End of list")
+                return List<A>()
+            } else {
+                println("Copy list node head:\(head!), tail:head2(\(tail!))")
+                var a = List<A>(head:head!, tail:headPrinting(tail!))
+                println("Copied list node head:\(head!), tail:\(tail!)")
+                return a
+            }
+        }
+    }
+    
+    func foldRightPrinting<A,B>(lst:List<A>, b:B)(f:(A,B)->B)->B {
+        let (head,tail) = lst.tuple()
+        switch (head,tail) {
+        case (nil,nil):
+            println("End of list")
+            return b
+        case (let head,let tail):
+            println("f(\(head!), foldRightPrinting(\(tail!)))")
+            var r = f(head!, foldRightPrinting(tail!, b: b)(f:f))
+            println("f(\(head!), foldRightPrinting(\(tail!)))=\(r)")
+            return r
+        }
+    }
+    
+    func foldLeftPrinting<A,B>(lst:List<A>, b:B)(f: (B,A) -> B) -> B {
+        let (head,tail) = lst.tuple()
+        switch (head,tail) {
+        case (nil,nil):
+            println("End of list")
+            return b
+        case (let head,let tail):
+            println("foldLeftPrinting(\(tail!),f(\(b),\(head!)))")
+            var v = foldLeftPrinting(tail!, b:f(b,head!))(f:f)
+            println("foldLeftPrinting(\(tail!),\(f(b,head!))) = \(v)")
+            return v
+        }
+    }
+    
+    func zipWith<A>(lst1:List<A>,lst2:List<A>,f:(A,A)->A) -> List<A> {
+        if lst1.isEmpty {
+            return List<A>()
+        } else if lst2.isEmpty {
+            return List<A>()
+        }
+        else {
+            let (head1,tail1) = lst1.tuple()
+            let (head2,tail2) = lst2.tuple()
+            return List<A>(head:f(head1!,head2!), tail:zipWith(tail1!,lst2:tail2!,f:f))
+        }
     }
 }
-//***************************************************************************************
