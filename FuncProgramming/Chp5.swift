@@ -168,6 +168,10 @@ class Stream<A> {
             return f(head).append(tail)
         })
     }
+    
+    func find(p: A -> Bool) -> Option<A> {
+        return self.filter(p).headOption()
+    }
 }
 
 func apply<A>(arr:[() -> A?]) -> Stream<A> {
@@ -185,4 +189,49 @@ func apply<A>(arr:[() -> A?]) -> Stream<A> {
         
         return Stream<A>(head, {apply(tail)})
     }
+}
+
+func constant<A>(a:A)->Stream<A> {
+    return Stream<A>({a},{constant(a)})
+}
+
+func from(n:Int)->Stream<Int> {
+    return Stream<Int>({n},{from(n+1)})
+}
+
+func fib(n:Int)->Stream<Int> {
+    var loop: (Int,Int) -> Stream<Int> = { _, _ in return Stream<Int>({0})}
+    loop = {
+        a,b in
+        return Stream<Int>({a},{loop(b,a+b)})
+    }
+    return loop(0,1)
+}
+
+func unfold<A,S>(z:S, f: S->Option<(A,S)>) -> Stream<A> {
+    switch f(z) {
+    case .None: return Stream<A>()
+    case .Some(let t): return Stream<A>({t.0},{unfold(t.1,f)})
+    }
+}
+
+func from2(n:Int)->Stream<Int> {
+    return unfold(n,{
+        s in
+        Option<(Int,Int)>.Some(some: (s,s+1))
+    })
+}
+
+func constant2(n:Int)->Stream<Int> {
+    return unfold(n,{
+        s in
+        Option<(Int,Int)>.Some(some: (s,s))
+    })
+}
+
+func ones2()->Stream<Int> {
+    return unfold(1,{
+        s in
+        Option<(Int,Int)>.Some(some: (s,s))
+    })
 }

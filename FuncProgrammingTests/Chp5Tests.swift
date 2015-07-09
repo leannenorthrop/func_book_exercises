@@ -122,4 +122,43 @@ class Chp5Tests: XCTestCase {
         let printablestream = lstResult.toList()
         println(printablestream)
     }
+    
+    func testStream() {
+        let lst = apply([{1},{2},{3},{4},{5}])
+        let l = lst.map({$0+10}).filter({$0%2==0}).toList()
+        println(l)
+    }
+    
+    func testExercise5_8() {
+        let lst = constant(5).take(10)
+        println(lst.toList())
+    }
+    
+    func testExercise5_9() {
+        let lst = from(5).take(10)
+        println(lst.toList())
+    }
+    
+    func testExercise5_11() {
+        let lst = unfold(2, {
+            s in
+            Option.Some(some:(s,(s*10)))
+        }).take(5).toList()
+        println(lst)
+    }
+    
+    func testExercise5_12_From() {
+        let lst = from2(3).take(5).toList()
+        println(lst)
+    }
+    
+    func testExercise5_12_Constant() {
+        let lst = constant2(3).take(5).toList()
+        println(lst)
+    }
+    
+    func testExercise5_12_Ones() {
+        let lst = ones2().take(5).toList()
+        println(lst)
+    }
 }
