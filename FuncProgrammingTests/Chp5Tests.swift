@@ -30,6 +30,7 @@ class Chp5Tests: XCTestCase {
         
     }
     
+    // Page 70
     func testExercise5_2_Take() {
         let lst = apply([{1},{3},{5},{7}])
         let s = lst.take(2)
@@ -37,6 +38,7 @@ class Chp5Tests: XCTestCase {
         println(printablestream)
     }
 
+    // Page 70
     func testExercise5_2_Drop() {
         let lst = apply([{1},{3},{5},{7}])
         let s = lst.drop(2)
@@ -44,10 +46,45 @@ class Chp5Tests: XCTestCase {
         println(printablestream)
     }
     
+    // Page 70
     func testExercise5_3() {
         let lst = apply([{1},{3},{5},{7},{10}])
         let s = lst.takeWhile{$0 < 10}
         let printablestream = s.toList()
         println(printablestream)
+    }
+    
+    func testExist2() {
+        let lst = apply([{1},{3},{5},{7},{10}])
+        let s = lst.exists2{$0 == 5}
+        XCTAssertTrue(s)
+    }
+    
+    // Page 71
+    func testExercise5_4() {
+        let lst = apply([{1},{3},{5},{7},{10}])
+        XCTAssertFalse(lst.forAll{$0 < 7})
+        XCTAssertTrue(lst.forAll{$0 < 11})
+    }
+    
+    // Page 71
+    func testExercise5_5() {
+        let lst = apply([{1},{3},{5},{7},{10}])
+        let lstResult = lst.takeWhile2{$0 < 7}
+        let printablestream = lstResult.toList()
+        println(printablestream)
+    }
+    
+    // Page 71
+    func testExercise5_6() {
+        let lst = apply([{1},{3},{5},{7},{10}])
+        let lstResult = lst.headOption2()
+        switch lstResult {
+        case .None: XCTAssertTrue(false)
+        case .Some(let l) :
+            let printablestream = l.toList()
+            println(printablestream)
+        }
+
     }
 }

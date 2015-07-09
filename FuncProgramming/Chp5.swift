@@ -80,6 +80,40 @@ class Stream<A> {
     func takeWhile(p: A -> Bool) -> Stream<A> {
         return self.isEmpty ? Stream<A>() : (p(self.head!) ? Stream<A>(self.headThunk, self.tail!.takeWhile(p)) : Stream<A>())
     }
+    
+    func exists(p: A ->Bool) -> Bool {
+        return self.isEmpty ? false : p(self.head!) || self.tail!.exists(p)
+    }
+    
+    func foldRight<B>(z: () -> B, _ f: (A, ()->B) -> B) -> B {
+        if self.isEmpty {
+            return z()
+        } else {
+            return f(self.head!, {self.tail!.foldRight(z, f)})
+        }
+    }
+    
+    func exists2(p: A ->Bool) -> Bool {
+        return self.foldRight({false},{a, b in p(a) || b()})
+    }
+    
+    func forAll(p: A ->Bool) -> Bool {
+        return self.foldRight({true},{a, b in p(a) && b()})
+    }
+    
+    func takeWhile2(p: A ->Bool) -> Stream<A> {
+        return self.foldRight({Stream<A>()},{
+            head, tail in
+            return p(head) ? Stream<A>({head},tail) : Stream<A>()
+        })
+    }
+    
+    func headOption2() -> Option<Stream<A>> {
+        return self.foldRight({Option<Stream<A>>.None},{
+            a, b in
+            return Option<Stream<A>>.Some(some:Stream<A>({a}))
+        })
+    }
 }
 
 func apply<A>(arr:[() -> A?]) -> Stream<A> {
