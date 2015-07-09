@@ -17,7 +17,7 @@ enum Option<A> : NilLiteralConvertible {
     }
     
     /// Construct a non-\ `nil` instance that stores `some`.
-    init(some: A) {
+    init(_ some: A) {
         self = Some(some:some)
     }
     
@@ -31,7 +31,7 @@ enum Option<A> : NilLiteralConvertible {
         case None: return Option<B>()
         case let Some(v):
             let b:B = f(v)
-            return Option<B>(some:b)
+            return Option<B>(b)
         }
     }
     
@@ -77,7 +77,7 @@ class Employee {
 
 func lookupByName(name:String) -> Option<Employee> {
     if name == "Leanne" {
-        return Option<Employee>(some:Employee(n:"Leanne",d:"IT"))
+        return Option<Employee>(Employee(n:"Leanne",d:"IT"))
     } else {
         return Option<Employee>()
     }

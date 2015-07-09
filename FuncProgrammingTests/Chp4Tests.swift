@@ -11,12 +11,12 @@ class Chp4Tests: XCTestCase {
 
     func testConstructors() {
         let none : Option<Int> = nil
-        let some : Option<Int> = Option<Int>(some:3)
+        let some : Option<Int> = Option<Int>(3)
     }
 
     // Page 54
     func testExercise4_1_Map() {
-        let some : Option<Int> = Option<Int>(some:3)
+        let some : Option<Int> = Option<Int>(3)
         let result : Option<Int> = some.map({$0 * 3})
         switch result {
         case .None: XCTAssertTrue(false)
@@ -26,8 +26,8 @@ class Chp4Tests: XCTestCase {
     
     // Page 54
     func testExercise4_1_FlatMap() {
-        let some : Option<Int> = Option<Int>(some:3)
-        let result : Option<Int> = some.flatMap({Option<Int>(some:($0 * 3))})
+        let some : Option<Int> = Option<Int>(3)
+        let result : Option<Int> = some.flatMap({Option<Int>(($0 * 3))})
         switch result {
         case .None: XCTAssertTrue(false)
         case let .Some(v):XCTAssertEqual(9,v)
@@ -36,7 +36,7 @@ class Chp4Tests: XCTestCase {
     
     // Page 54
     func testExercise4_1_GetOrElse() {
-        let some : Option<Int> = Option<Int>(some:3)
+        let some : Option<Int> = Option<Int>(3)
         let result = some.getOrElse(4)
         XCTAssertEqual(3,result)
         XCTAssertEqual(4,Option<Int>().getOrElse(4))
@@ -44,7 +44,7 @@ class Chp4Tests: XCTestCase {
     
     // Page 54
     func testExercise4_1_Filter() {
-        let some : Option<Int> = Option<Int>(some:3)
+        let some : Option<Int> = Option<Int>(3)
         let result = some.filter({$0 == 4})
         switch result {
         case .None: XCTAssertTrue(true)
