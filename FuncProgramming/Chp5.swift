@@ -114,6 +114,60 @@ class Stream<A> {
             return Option<Stream<A>>.Some(some:Stream<A>({a}))
         })
     }
+    
+    func map<B>(f: A->B) -> Stream<B> {
+        return self.foldRight({Stream<B>()},{
+            head, tail in
+            return Stream<B>({f(head)},tail)
+        })
+    }
+    
+    func filter(f:A->Bool)->Stream<A> {
+        return self.foldRight({Stream<A>()},{
+            head, tail in
+            if f(head) {
+                let h : () -> A? = {head}
+                let t : () -> Stream<A>? = tail
+                return Stream<A>(h,t)
+            } else {
+                return tail()
+            }
+        })
+    }
+    
+    func append(a: () -> A?) -> Stream<A> {
+        return self.foldRight({Stream<A>(a)},{
+            head, tail in
+            let h : () -> A? = {head}
+            let t : () -> Stream<A>? = tail
+            return Stream<A>(h,t)
+        })
+    }
+    
+    func append(a: Stream<A>) -> Stream<A> {
+        return self.foldRight({a},{
+            head, tail in
+            let h : () -> A? = {head}
+            let t : () -> Stream<A>? = tail
+            return Stream<A>(h,t)
+        })
+    }
+    
+    func append(a: () -> Stream<A>) -> Stream<A> {
+        return self.foldRight(a,{
+            head, tail in
+            let h : () -> A? = {head}
+            let t : () -> Stream<A>? = tail
+            return Stream<A>(h,t)
+        })
+    }
+    
+    func flatMap<B>(f: A->Stream<B>) -> Stream<B> {
+        return self.foldRight({Stream<B>()}, {
+            head, tail in
+            return f(head).append(tail)
+        })
+    }
 }
 
 func apply<A>(arr:[() -> A?]) -> Stream<A> {

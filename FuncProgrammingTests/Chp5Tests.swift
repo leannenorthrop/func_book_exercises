@@ -87,4 +87,39 @@ class Chp5Tests: XCTestCase {
         }
 
     }
+    
+    // Page 72
+    func testExercise5_7_Append() {
+        let lst = apply([{1},{3},{5},{7},{10}])
+        let lstResult = lst.append({11})
+        let printablestream = lstResult.toList()
+        println(printablestream)
+    }
+    
+    // Page 72
+    func testExercise5_7_Filter() {
+        let lst = apply([{1},{3},{5},{7},{10}])
+        let lstResult = lst.filter({$0<7})
+        let printablestream = lstResult.toList()
+        println(printablestream)
+    }
+    
+    // Page 72
+    func testExercise5_7_Map() {
+        let lst = apply([{1},{3},{5},{7},{10}])
+        let lstResult = lst.map({$0*10})
+        let printablestream = lstResult.toList()
+        println(printablestream)
+    }
+    
+    // Page 72
+    func testExercise5_7_FlatMap() {
+        let lst = apply([{1},{3},{5},{7},{10}])
+        let lstResult = lst.flatMap({
+            int in
+            Stream<Int>({int*11})
+        })
+        let printablestream = lstResult.toList()
+        println(printablestream)
+    }
 }
