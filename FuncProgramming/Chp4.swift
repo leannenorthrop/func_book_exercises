@@ -138,3 +138,120 @@ func sequence<A>(a:List<Option<A>>) -> Option<List<A>> {
     }
 }
 
+func traverseInefficient<A,B>(a:List<A>,f: A-> Option<B>) -> Option<List<B>> {
+    let lst = ListHelpers().map(a)(f:{f($0)})
+    return sequence(lst)
+}
+
+func traverse<A,B>(a:List<A>,f:A->Option<B>) -> Option<List<B>> {
+    let (head,tail) = a.tuple()
+    switch (head,tail) {
+    case (nil,nil): return Option<List<B>>.Some(some:List<B>())
+                     //map2(Option<B>, Option<List<B>>){new node}
+    case (_,_): return map2(f(head!), traverse(tail!,f)){List<B>(head:$0,tail:$1)}
+    }
+}
+
+/// This is a workaround-wrapper class for a bug in the Swift compiler. DO NOT USE THIS CLASS!!
+/// http://owensd.io/2014/07/09/error-handling.html
+public class FailableValueWrapper<T> {
+    public let value: T
+    public init(_ value: T) { self.value = value }
+}
+
+public enum Either<A> {
+    case Right(FailableValueWrapper<A>)
+    case Left(String)
+    
+    public init(_ value: A) {
+        self = .Right(FailableValueWrapper(value))
+    }
+    
+    public init(_ error: String) {
+        self = .Left(error)
+    }
+    
+    public var failed: Bool {
+        switch self {
+        case .Left(let error):
+            return true
+            
+        default:
+            return false
+        }
+    }
+    
+    public var error: String? {
+        switch self {
+        case .Left(let error):
+            return error
+            
+        default:
+            return nil
+        }
+    }
+    
+    public var value: A? {
+        switch self {
+        case .Right(let wrapper):
+            return wrapper.value
+            
+        default:
+            return nil
+        }
+    }
+    
+    func map<B>(f: A->B) -> Either<B> {
+        switch self {
+        case Left: return .Left("Map failed")
+        case Right(let v):
+            let b:B = f(v.value)
+            return Either<B>.Right(FailableValueWrapper<B>(b))
+        }
+    }
+    
+    func flatMap<B>(f: (A) -> Either<B>) -> Either<B> {
+        switch self {
+        case Left: return Either<B>.Left("")
+        case Right(let v):
+            return f(v.value)
+        }
+    }
+    
+    func orElse(def:Either<A>) -> Either<A> {
+        switch self {
+        case Left: return def
+        case Right:return self
+        }
+    }
+    
+    func map2<B,C>(b:Either<B>,f:(A,B)->C) -> Either<C> {
+        return self.flatMap{aa in b.map { bb in f(aa,bb) }}
+    }
+}
+
+func mean2(xs: List<Double>) -> Either<Double> {
+    if xs.isEmpty {
+        return Either.Left("Mean of empty list not possible.")
+    } else {
+        let sum = ListHelpers().foldLeft(xs, b: Double(0)){
+            (acc:Double,d:Double) -> Double in
+            acc+d
+        }
+        let total = Double(ListHelpers().length(xs))
+        return Either.Right(FailableValueWrapper<Double>(sum/total))
+    }
+}
+
+func sequence<A>(a:List<Either<A>>) -> Either<List<A>> {
+    let (head,tail) = a.tuple()
+    switch (head,tail) {
+    case (nil,nil): return Either<List<A>>.Right(FailableValueWrapper<List<A>>(List<A>()))
+    case (_,_): return head!.flatMap{aa in sequence(tail!).map{List<A>(head:aa, tail: $0)}}
+    }
+}
+
+func traverseInefficient<A,B>(a:List<A>,f: A-> Either<B>) -> Either<List<B>> {
+    let lst = ListHelpers().map(a)(f:{f($0)})
+    return sequence(lst)
+}
