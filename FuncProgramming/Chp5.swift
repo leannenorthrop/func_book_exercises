@@ -172,6 +172,80 @@ class Stream<A> {
     func find(p: A -> Bool) -> Option<A> {
         return self.filter(p).headOption()
     }
+    
+    func take2(n:Int) -> Stream<A> {
+        return unfold((self,n),{
+            s in
+            if s.0.isEmpty {
+                return Option<(A, (Stream<A>,Int))>.None
+            } else if s.1 == 1 {
+                return Option<(A, (Stream<A>,Int))>.Some(some: (s.0.head!, (Stream<A>(),0)))
+            } else {
+                return Option<(A, (Stream<A>,Int))>.Some(some: (s.0.head!, (s.0.tail!,s.1-1)))
+            }
+        })
+    }
+    
+    func takeWhile3(p: A -> Bool) -> Stream<A> {
+        return unfold(self,{
+            s in
+            if s.0.isEmpty || !p(s.0.head!){
+                return Option<(A, Stream<A>)>.None
+            } else {
+                return Option<(A, Stream<A>)>.Some(some: (s.0.head!, s.0.tail!))
+            }
+        })
+    }
+    
+    func map2<B>(f: A->B) -> Stream<B> {
+        return unfold(self,{
+            s in
+            if s.0.isEmpty {
+                return Option<(B, Stream<A>)>.None
+            } else {
+                return Option<(B, Stream<A>)>.Some(some: (f(s.0.head!), s.0.tail!))
+            }
+        })
+    }
+    
+    func zipWith(lst:Stream<A>,f:(A,A)->A) -> Stream<A> {
+        return unfold((self,lst),{
+            s in
+            if s.0.isEmpty || s.1.isEmpty {
+                return Option<(A, (Stream<A>,Stream<A>))>.None
+            } else {
+                return Option<(A, (Stream<A>,Stream<A>))>.Some(some: (f(s.0.head!,s.1.head!), (s.0.tail!,s.1.tail!)))
+            }
+        })
+    }
+    
+    // Not sure about the safety of this function
+    func zipAll<B>(lst:Stream<B>) -> Stream<(Option<A>,Option<B>)> {
+        return unfold((self,lst),{
+            s in
+            if s.0.isEmpty && s.1.isEmpty {
+                return Option<((Option<A>,Option<B>), (Stream<A>,Stream<B>))>.None
+            } else if s.0.isEmpty {
+                return Option<((Option<A>,Option<B>), (Stream<A>,Stream<B>))>.Some(some: ((Option<A>.None,Option<B>.Some(some: s.1.head!)), (s.0, s.1.tail!)))
+            } else if s.1.isEmpty {
+                return Option<((Option<A>,Option<B>), (Stream<A>,Stream<B>))>.Some(some: ((Option<A>.Some(some: s.0.head!),Option<B>.None), (s.0, s.1.tail!)))
+            } else {
+                return Option<((Option<A>,Option<B>), (Stream<A>,Stream<B>))>.Some(some: ((Option<A>.Some(some: s.0.head!),Option<B>.Some(some: s.1.head!)), (s.0, s.1.tail!)))
+            }
+        })
+    }
+    
+    func tails() -> Stream<Stream<A>> {
+        return unfold(self) {
+            s in
+            if s.isEmpty {
+                return Option<(Stream<A>, Stream<A>)>.None
+            } else {
+                return Option<(Stream<A>, Stream<A>)>.Some(some:(s, s.drop(1)))
+            }
+        }.append(Stream<Stream<A>>())
+
+    }
 }
 
 func apply<A>(arr:[() -> A?]) -> Stream<A> {
@@ -234,4 +308,20 @@ func ones2()->Stream<Int> {
         s in
         Option<(Int,Int)>.Some(some: (s,s))
     })
+}
+
+func startsWith(s1:Stream<Int>,s2:Stream<Int>) -> Bool {
+    if s2.isEmpty {
+        return true
+    } else if s1.isEmpty {
+        return false
+    } else if s1.head! == s2.head! {
+        return true && startsWith(s1.tail!,s2.tail!)
+    } else {
+        return false
+    }
+}
+
+func hasSubsequence(s1: Stream<Int>, s2: Stream<Int>) -> Bool {
+    return s1.tails().exists{startsWith($0, s2)}
 }

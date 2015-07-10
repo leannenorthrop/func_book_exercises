@@ -129,16 +129,19 @@ class Chp5Tests: XCTestCase {
         println(l)
     }
     
+    // Page 72
     func testExercise5_8() {
         let lst = constant(5).take(10)
         println(lst.toList())
     }
     
+    // Page 72
     func testExercise5_9() {
         let lst = from(5).take(10)
         println(lst.toList())
     }
     
+    // Page 75
     func testExercise5_11() {
         let lst = unfold(2, {
             s in
@@ -146,19 +149,84 @@ class Chp5Tests: XCTestCase {
         }).take(5).toList()
         println(lst)
     }
-    
+
+    // Page 75
     func testExercise5_12_From() {
         let lst = from2(3).take(5).toList()
         println(lst)
     }
     
+    // Page 75
     func testExercise5_12_Constant() {
         let lst = constant2(3).take(5).toList()
         println(lst)
     }
     
+    // Page 75
     func testExercise5_12_Ones() {
         let lst = ones2().take(5).toList()
         println(lst)
+    }
+    
+    // Page 76
+    func testExercise5_13_TakeN() {
+        let lst = apply([{1},{2},{3},{4},{5},{6},{7},{8}])
+        let lst2 = lst.take2(5).toList()
+        println(lst2)
+    }
+    
+    // Page 76
+    func testExercise5_13_TakeWhile() {
+        let lst = apply([{1},{2},{3},{4},{5},{6},{7},{8}])
+        let lst2 = lst.takeWhile3({$0<5}).toList()
+        println(lst2)
+    }
+    
+    // Page 76
+    func testExercise5_13_Map() {
+        let lst = apply([{1},{2},{3},{4},{5},{6},{7},{8}])
+        let lst2 = lst.map2({$0*12}).toList()
+        println(lst2)
+    }
+    
+    // Page 76
+    func testExercise5_13_ZipWith() {
+        let lst = apply([{1},{2},{3},{4},{5},{6},{7},{8}])
+        let lst2 = apply([{10},{20},{30},{40},{50},{60},{70},{80}])
+        let lst3 = lst.zipWith(lst2){$0+$1}.toList()
+        println(lst3)
+    }
+    
+    // Page 76
+    func testExercise5_13_ZipAll() {
+        let lst = apply([{1},{2},{3},{4},{5},{6},{7},{8}])
+        let lst2 = apply([{10},{20},{30},{40}])
+        let lst3 = lst.zipAll(lst2)
+    }
+    
+    // Page 76
+    func testExercise5_14() {
+        let lst = apply([{1},{2},{3},{4},{5},{6},{7},{8}])
+        let lst2 = apply([{1},{2},{3},{4}])
+        XCTAssertTrue(startsWith(lst,lst2))
+        let lst3 = apply([{10},{20},{30},{40}])
+        XCTAssertFalse(startsWith(lst,lst3))
+    }
+    
+    // Page 76
+    func testExercise5_15() {
+        let lst = apply([{1},{2},{3},{4},{5},{6},{7},{8}])
+        let lst2 = lst.tails()
+        let str = lst2.map2{$0.toList().description}
+        println(str.toList().description)
+    }
+    
+    // Page 76
+    func testHasSubsequence() {
+        let lst = apply([{1},{2},{3},{4},{5},{6},{7},{8}])
+        let lst2 = apply([{3},{4},{5},{6}])
+        XCTAssertTrue(hasSubsequence(lst,lst2))
+        let lst3 = apply([{10},{20},{30},{40}])
+        XCTAssertFalse(hasSubsequence(lst,lst3))
     }
 }
