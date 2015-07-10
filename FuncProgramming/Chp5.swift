@@ -244,7 +244,6 @@ class Stream<A> {
                 return Option<(Stream<A>, Stream<A>)>.Some(some:(s, s.drop(1)))
             }
         }.append(Stream<Stream<A>>())
-
     }
 }
 
