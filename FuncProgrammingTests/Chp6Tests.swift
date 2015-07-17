@@ -125,4 +125,12 @@ class Chp6Tests: XCTestCase {
         let state2 = state.map{1.0/Double($0)}
         let (a2,s2) = state2.run(SimpleRNG(5))
     }
+    
+    func testMachine() {
+        let m = Machine(true,10,5)
+        let actions : List<Input> = ListHelpers().apply([Coin(),Turn(),Coin(),Turn(),Coin(),Turn(),Coin(),Turn()])
+        let newM = m.simulateMachine(actions)
+        XCTAssertEqual(14, newM.coins)
+        XCTAssertEqual(1, newM.candies)
+    }
 }

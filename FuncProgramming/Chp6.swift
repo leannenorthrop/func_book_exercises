@@ -245,3 +245,52 @@ struct State<S,A> {
         }
     }
 }
+
+protocol Input {}
+struct Coin : Input {}
+struct Turn : Input {}
+
+struct Machine {
+    let locked:Bool
+    let coins:Int
+    let candies:Int
+    
+    init(_ l:Bool,_ co:Int, _ ca:Int) {
+        self.locked = l
+        self.coins = co
+        self.candies = ca
+    }
+
+    func tuple() -> (Bool,Int,Int) {
+        return (locked,coins,candies)
+    }
+    
+    func simulateMachine(inputs:List<Input>) -> Machine{
+        let seq = ListHelpers().map(inputs)(f:{
+            (input:Input) -> State<Machine,(Int,Int)> in
+            return State<Machine,(Int,Int)>({
+                (m:Machine) -> ((Int,Int),Machine) in
+                let newM = update(input,m)
+                return ((newM.coins,newM.candies),newM)
+            })
+        })
+        let me = self
+        let initState = State<Machine,(Int,Int)>({((me.coins,me.candies),$0)})
+        let (list,finalMachine) = initState.sequence(seq)(self)
+        return finalMachine
+    }
+}
+
+func update(i:Input,s:Machine) -> Machine  {
+    let (i, t) = (i,s.tuple())
+    switch (i,t) {
+    case (_, (_, 0, _)): return s
+    case (is Coin, (false, _, _)): return s
+    case (is Turn, (true, _, _)): return s
+    case (is Coin, (true, let coin, let candy)):
+        return Machine(false, coin + 1,candy)
+    case (is Turn, (false, let coin, let candy)):
+        return Machine(true, coin,candy - 1)
+    default: return s
+    }
+}
