@@ -44,6 +44,11 @@ func nonNegativeInt(rng:RNG) -> RandomTuple {
     return (t.int < 0 ? -(t.int) : t.int, t.rng)
 }
 
+func nonNegativeInt2(_ rng:RNG) -> (Int,RNG) {
+    let t = rng.nextInt()
+    return (t.int < 0 ? -(t.int) : t.int, t.rng)
+}
+
 // Page 83
 /// Generate a random non-negative double between 0 and 1 and return along with next
 /// RandomNumberGenerator
@@ -154,10 +159,22 @@ func intsViaSequence(count:Int,rng:RNG) -> (List<Int>,RNG) {
     }
 }
 
-/*func flatMapRng<A,B>(f:RNG->(A->RNG), g:A->RNG->(B,RNG)) -> RNG -> B {
+func flatMapRng<A,B>(f:(RNG)->(A,RNG), g:(A)->RNG->(B,RNG)) -> RNG -> (B,RNG) {
     return {
         rng in
         let (a, r1) = f(rng)
-        g(a)(r1) // We pass the new state along
+        return g(a)(r1)
     }
-}*/
+}
+
+func nonNegativeLessThan(n:Int) -> RNG -> (Int,RNG) {
+    return flatMapRng(nonNegativeInt2,{
+        (i:Int) -> RNG -> (Int,RNG) in
+        let mod = i % n
+        if (i + (n-1) - mod >= 0) {
+            return unit(mod)
+        } else {
+            return nonNegativeLessThan(n)
+        }
+    })
+}

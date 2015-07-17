@@ -96,4 +96,26 @@ class Chp6Tests: XCTestCase {
         let r5 : SimpleRNG = r3.1 as! SimpleRNG
         XCTAssertEqual(r4.seed, r5.seed)
     }
+    
+    func testFlatMap() {
+        let f = flatMapRng(nonNegEven(),{
+            (a:Int) -> RNG -> (Double,RNG) in
+            let b = 1.0/Double(a)
+            return {
+                rng in
+                return (b,rng)
+            }
+        })
+        
+        let (b,rng) = f(SimpleRNG(5))
+
+        let f2 = flatMapRng(nonNegativeInt2,{
+            (a:Int) -> RNG -> (Double,RNG) in
+            let b = 1.0/Double(a)
+            return {
+                rng in
+                return (b,rng)
+            }
+        })
+    }
 }
