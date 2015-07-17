@@ -178,3 +178,19 @@ func nonNegativeLessThan(n:Int) -> RNG -> (Int,RNG) {
         }
     })
 }
+
+func mapInTermsOfFlatMap<A,B>(s: RNG->(A,RNG),f:A->B) -> RNG -> (B,RNG) {
+    return flatMapRng(s,{
+        (a:A) -> RNG -> (B,RNG) in
+        return unit(f(a))
+    })
+}
+
+func map2InTermsOfFlatMap<A,B,C>(ra: RNG -> (A,RNG),
+                                 rb: RNG -> (B,RNG),
+                                 f: (A,B) -> C) -> RNG -> (C,RNG) {
+    return flatMapRng(ra,{
+        (a:A) -> RNG -> (C,RNG) in
+        return map(rb){f(a,$0)}
+    })
+}
