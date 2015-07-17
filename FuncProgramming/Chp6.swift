@@ -194,3 +194,54 @@ func map2InTermsOfFlatMap<A,B,C>(ra: RNG -> (A,RNG),
         return map(rb){f(a,$0)}
     })
 }
+
+struct State<S,A> {
+    let transition:S -> (A,S)
+    
+    init(_ t:(S) -> (A,S)) {
+        self.transition = t
+    }
+    
+    func run(s:S) -> (A,S) {
+        return transition(s)
+    }
+    
+    func unit(a:A) -> State<S,A> {
+        return State({(a,$0)})
+    }
+    
+    func flatMap<B>(f:(A)->State<S,B>) -> State<S,B> {
+        return State<S,B>({
+            let (a:A, s1:S) = self.run($0)
+            return f(a).run(s1)
+        })
+    }
+    
+    func map<B>(f:A->B) -> State<S,B> {
+        return self.flatMap{
+            (a:A) -> State<S,B> in
+            State<S,B>({(f(a),$0)})
+        }
+    }
+    
+    func map2<B,C>(rb: State<S,B>,
+                   f: (A,B) -> C) -> State<S,C> {
+            return self.flatMap{
+                (a:A) -> State<S,C> in
+                return rb.map{f(a,$0)}
+            }
+    }
+    
+    func sequence(fs: List<State<S,A>>) -> S -> (List<A>,S) {
+        return {
+            state in
+            ListHelpers().foldLeftIterative(fs, b: (List<A>(),state), f: {
+                t,f in
+                let lst = t.0
+                let s = t.1
+                let (a,nextState) = f.run(s)
+                return (ListHelpers().append(lst,a:a), nextState)
+            })
+        }
+    }
+}

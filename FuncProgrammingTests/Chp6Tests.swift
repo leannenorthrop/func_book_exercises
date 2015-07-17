@@ -118,4 +118,11 @@ class Chp6Tests: XCTestCase {
             }
         })
     }
+    
+    func testState() {
+        let state = State(nonNegEven())
+        let (a,s) = state.run(SimpleRNG(5))
+        let state2 = state.map{1.0/Double($0)}
+        let (a2,s2) = state2.run(SimpleRNG(5))
+    }
 }
