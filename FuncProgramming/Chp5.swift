@@ -1,9 +1,8 @@
 //
 //  Chp5.swift
-//  FuncProgramming
+//  Example and exercise code from 'Functional Programming in Scala' in Swift.
 //
 //  Created by Leanne Northrop on 09/07/2015.
-//  Copyright (c) 2015 Leanne Northrop. All rights reserved.
 //
 
 import Foundation
